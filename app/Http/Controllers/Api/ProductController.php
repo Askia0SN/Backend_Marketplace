@@ -271,6 +271,19 @@ class ProductController extends Controller
         return response()->json(['is_favorite' => $exists]);
     }
 
+    public function manage(Request $request, Product $product): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($product->user_id !== $user->id && $user->role !== 'admin') {
+            abort(403);
+        }
+
+        $product->load(['category:id,name,slug', 'seller:id,name']);
+
+        return response()->json($this->sellerProductPayload($product));
+    }
+
     private function deleteProductImages(Product $product): void
     {
         if ($product->image) {

@@ -47,6 +47,8 @@ Route::middleware(['auth:sanctum', 'not_suspended'])->group(function (): void {
     Route::put('auth/profile', [AuthController::class, 'updateProfile']);
 
     Route::get('products/my-products', [ProductController::class, 'myProducts']);
+    Route::get('products/{product}/manage', [ProductController::class, 'manage'])
+        ->whereNumber('product');
     Route::get('products/{product}/is-favorite', [ProductController::class, 'isFavorite'])
         ->whereNumber('product');
     Route::post('products/{product}/reviews', [ReviewController::class, 'store'])

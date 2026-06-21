@@ -101,6 +101,20 @@ test('acheteur ne peut pas créer de produit', function (): void {
     ])->assertForbidden();
 });
 
+test('vendeur peut consulter son brouillon pour le modifier', function (): void {
+    $seller = User::factory()->create(['role' => 'seller']);
+    $otherSeller = User::factory()->create(['role' => 'seller']);
+    $product = Product::factory()->draft()->create(['user_id' => $seller->id]);
+
+    Sanctum::actingAs($seller);
+    $this->getJson("/api/products/{$product->id}/manage")
+        ->assertOk()
+        ->assertJsonPath('status', 'draft');
+
+    Sanctum::actingAs($otherSeller);
+    $this->getJson("/api/products/{$product->id}/manage")->assertForbidden();
+});
+
 test('panier et commande', function (): void {
     $seller = User::factory()->create(['role' => 'seller']);
     $buyer = User::factory()->create(['role' => 'buyer']);
