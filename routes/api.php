@@ -27,8 +27,10 @@ Route::get('categories/{category}', [CategoryController::class, 'show']);
 
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/top-selling', [ProductController::class, 'topSelling']);
-Route::get('products/{product}/reviews', [ReviewController::class, 'index']);
-Route::get('products/{product}', [ProductController::class, 'show']);
+Route::get('products/{product}/reviews', [ReviewController::class, 'index'])
+    ->whereNumber('product');
+Route::get('products/{product}', [ProductController::class, 'show'])
+    ->whereNumber('product');
 
 Route::get('sellers/{user}', [SellerController::class, 'show']);
 Route::get('sellers/{user}/products', [SellerController::class, 'products']);
@@ -45,15 +47,19 @@ Route::middleware(['auth:sanctum', 'not_suspended'])->group(function (): void {
     Route::put('auth/profile', [AuthController::class, 'updateProfile']);
 
     Route::get('products/my-products', [ProductController::class, 'myProducts']);
-    Route::get('products/{product}/is-favorite', [ProductController::class, 'isFavorite']);
-    Route::post('products/{product}/reviews', [ReviewController::class, 'store']);
+    Route::get('products/{product}/is-favorite', [ProductController::class, 'isFavorite'])
+        ->whereNumber('product');
+    Route::post('products/{product}/reviews', [ReviewController::class, 'store'])
+        ->whereNumber('product');
 
     Route::middleware('seller')->group(function (): void {
         Route::post('products', [ProductController::class, 'store']);
     });
 
-    Route::put('products/{product}', [ProductController::class, 'update']);
-    Route::delete('products/{product}', [ProductController::class, 'destroy']);
+    Route::put('products/{product}', [ProductController::class, 'update'])
+        ->whereNumber('product');
+    Route::delete('products/{product}', [ProductController::class, 'destroy'])
+        ->whereNumber('product');
 
     Route::delete('reviews/{review}', [ReviewController::class, 'destroy']);
 
