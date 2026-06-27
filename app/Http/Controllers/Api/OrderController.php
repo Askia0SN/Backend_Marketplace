@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Services\CouponService;
 use App\Services\OrderStatusService;
+use App\Support\Money;
 use App\Support\PublicStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -68,8 +69,8 @@ class OrderController extends Controller
             foreach ($cart as $item) {
                 $product = Product::query()->whereKey($item->product_id)->lockForUpdate()->firstOrFail();
                 $unit = $product->effectivePrice();
-                $sub = bcmul($unit, (string) $item->quantity, 2);
-                $total = bcadd($total, $sub, 2);
+                $sub = Money::multiply($unit, $item->quantity);
+                $total = Money::add($total, $sub);
 
                 OrderItem::query()->create([
                     'order_id' => $order->id,
@@ -95,7 +96,7 @@ class OrderController extends Controller
             );
 
             $discount = $couponPayload['discount'];
-            $final = bcsub($total, $discount, 2);
+            $final = Money::subtract($total, $discount);
 
             $order->update([
                 'total_amount' => $final,

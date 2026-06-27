@@ -84,7 +84,11 @@ test('vendeur crée un produit avec image', function (): void {
         'status' => 'published',
     ])->assertCreated();
 
+    $product = Product::query()->where('title', 'Article')->firstOrFail();
+
     $this->assertDatabaseHas('products', ['title' => 'Article', 'status' => 'published']);
+    Storage::disk('public')->assertExists($product->image);
+    $this->get('/storage/'.$product->image)->assertOk();
 });
 
 test('acheteur ne peut pas créer de produit', function (): void {

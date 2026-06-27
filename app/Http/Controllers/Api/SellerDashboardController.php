@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Support\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,7 +84,7 @@ class SellerDashboardController extends Controller
             'top_products' => $topProducts->map(fn (Product $p) => [
                 'title' => $p->title,
                 'sales_count' => $p->sales_count,
-                'revenue' => bcmul((string) $p->price, (string) $p->sales_count, 2),
+                'revenue' => Money::multiply($p->price, $p->sales_count),
             ]),
             'monthly_sales' => $monthly->map(fn ($row) => [
                 'month' => $row->month,

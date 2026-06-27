@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Support\Money;
 use App\Support\PublicStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class CartController extends Controller
         $payload = $items->map(function (CartItem $item) {
             $p = $item->product;
             $unit = $p ? $p->effectivePrice() : '0';
-            $subtotal = bcmul($unit, (string) $item->quantity, 2);
+            $subtotal = Money::multiply($unit, $item->quantity);
 
             return [
                 'id' => $item->id,
@@ -47,7 +48,7 @@ class CartController extends Controller
 
         return response()->json([
             'items' => $payload->values()->all(),
-            'total' => number_format($total, 2, '.', ''),
+            'total' => Money::format($total),
             'item_count' => $items->sum('quantity'),
         ]);
     }
