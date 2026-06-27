@@ -2,8 +2,6 @@
 
 namespace App\Support;
 
-use Illuminate\Support\Facades\Storage;
-
 final class PublicStorage
 {
     public static function url(?string $path): ?string
@@ -12,6 +10,6 @@ final class PublicStorage
             return null;
         }
 
-        return Storage::disk('public')->url($path);
+        return url('/storage/'.ltrim($path, '/'));
     }
 }
