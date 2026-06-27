@@ -10,6 +10,10 @@ final class PublicStorage
             return null;
         }
 
-        return url('/storage/'.ltrim($path, '/'));
+        $request = request();
+        $scheme = explode(',', $request->headers->get('x-forwarded-proto', $request->getScheme()))[0];
+        $host = explode(',', $request->headers->get('x-forwarded-host', $request->getHost()))[0];
+
+        return trim($scheme).'://'.trim($host).'/storage/'.ltrim($path, '/');
     }
 }
