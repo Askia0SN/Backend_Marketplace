@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SellerController;
 use App\Http\Controllers\Api\SellerDashboardController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('health', HealthController::class);
 
 Route::middleware('throttle:auth')->group(function (): void {
     Route::post('auth/register', [AuthController::class, 'register']);

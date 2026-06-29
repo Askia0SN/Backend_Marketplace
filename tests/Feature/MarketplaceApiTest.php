@@ -18,6 +18,13 @@ beforeEach(function (): void {
     Storage::fake('public');
 });
 
+test('health check public', function (): void {
+    $this->getJson('/api/health')
+        ->assertOk()
+        ->assertJsonPath('status', 'ok')
+        ->assertJsonPath('checks.database', 'ok');
+});
+
 test('inscription avec rôle et profil auth', function (): void {
     $reg = $this->postJson('/api/auth/register', [
         'name' => 'Vendeur',

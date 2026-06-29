@@ -6,7 +6,7 @@ Ce document resume la configuration de production du backend Laravel sur Railway
 
 - Backend GitHub : `https://github.com/Askia0SN/Backend_Marketplace`
 - API Railway : `https://backendmarketplace-production.up.railway.app/api`
-- Test rapide : `https://backendmarketplace-production.up.railway.app/api/categories`
+- Test rapide : `https://backendmarketplace-production.up.railway.app/api/health`
 
 ## Version PHP
 
@@ -69,6 +69,7 @@ Les seeders ajoutent les categories, les comptes de demonstration et le coupon `
 Endpoints utiles pour verifier rapidement la production :
 
 ```text
+GET /api/health
 GET /api/categories
 GET /api/products
 POST /api/auth/login
